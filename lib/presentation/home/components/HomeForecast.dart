@@ -107,14 +107,15 @@ class HomeForecast extends StatelessWidget {
   }
 }
 
-Widget cardContainer({required Widget child, required Function() onTap}) {
+Widget cardContainer({required Widget child,  Function()? onTap, double? width, Color? bgColor}) {
   const radius = AppFonts.s10;
   return Stack(
     children: [
       Container(
+        width: width,
         padding: const EdgeInsets.all(AppFonts.s16),
         decoration: BoxDecoration(
-            color: AppColors.grey20.withOpacity(0.2),
+            color: bgColor ?? AppColors.grey20.withOpacity(0.2),
             borderRadius: BorderRadius.circular(radius)),
         child: child,
       ),
