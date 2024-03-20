@@ -24,7 +24,10 @@ class TextStyles{
   //medium
   static const TextStyle medium12Background = TextStyle(color: AppColors.primaryBackground, fontSize: AppFonts.s12, fontFamily: Family.medium);
   static const TextStyle medium14White = TextStyle(color: AppColors.white, fontSize: AppFonts.s14, fontFamily: Family.medium);
+  static const TextStyle medium14Black = TextStyle(color: AppColors.black, fontSize: AppFonts.s14, fontFamily: Family.medium);
+  static const TextStyle medium14Grey = TextStyle(color: AppColors.grey50, fontSize: AppFonts.s14, fontFamily: Family.medium);
   static const TextStyle medium16White = TextStyle(color: AppColors.white, fontSize: AppFonts.s16, fontFamily: Family.medium);
+  static const TextStyle medium16Grey = TextStyle(color: AppColors.grey50, fontSize: AppFonts.s16, fontFamily: Family.medium);
   static const TextStyle medium16WhiteSpace = TextStyle(color: AppColors.white, fontSize: AppFonts.s16, fontFamily: Family.medium, letterSpacing: 20);
   static const TextStyle medium20White = TextStyle(color: AppColors.white, fontSize: AppFonts.s20, fontFamily: Family.medium);
 

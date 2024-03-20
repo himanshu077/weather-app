@@ -9,4 +9,6 @@ class AppIcons{
   static const String wind = '${_iconPath}wind.png';
   static const String humidity = '${_iconPath}humidity.png';
   static const String building = '${_iconPath}building.png';
+  static const String dot3 = '${_iconPath}dot3.png';
+  static const String close = '${_iconPath}close.png';
 }
