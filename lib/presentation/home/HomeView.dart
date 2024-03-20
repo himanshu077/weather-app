@@ -10,6 +10,7 @@ import 'components/HomeForecast.dart';
 import 'components/WeatherPresentation.dart';
 
 class HomeView extends StatefulWidget {
+  static const String name = 'HomeView';
   const HomeView({super.key});
 
   @override
@@ -19,7 +20,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
 
   void _forecastClickAction() {}
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,11 @@ class _HomeViewState extends State<HomeView> {
               padding: const EdgeInsets.symmetric(vertical: AppFonts.s20),
               child: BlocConsumer<WeatherBloc, WeatherState>(
                 listener: (context, state) {
-                  // TODO: implement listener
+                  if(state is LoadingState && state.screenName == HomeView.name){
+                    context.load;
+                  }else if(state is SuccessState && state.screenName == HomeView.name){
+                    context.stopLoader;
+                  }
                 },
                 builder: (context, state) {
                   return Column(
