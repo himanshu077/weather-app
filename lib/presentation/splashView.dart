@@ -53,15 +53,3 @@ class _SplashViewState extends State<SplashView> {
   }
 }
 
-
-class Co extends StatelessWidget {
-  const Co({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(),
-    );
-  }
-}
-

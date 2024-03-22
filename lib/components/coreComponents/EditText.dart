@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../constants/AppColors.dart';
-import '../constants/AppFonts.dart';
 import '../constants/TextStyles.dart';
 
 class EditText extends StatefulWidget {
@@ -32,7 +31,6 @@ class _EditTextState extends State<EditText> {
 
   @override
   Widget build(BuildContext context) {
-    final borderStyle = _borderStyle(borderColor: widget.borderColor,radius: widget.radius);
     return Padding(
       padding: widget.margin ?? EdgeInsets.zero,
       child: TextField(
@@ -42,10 +40,10 @@ class _EditTextState extends State<EditText> {
         onTap: widget.onTap,
         style: widget.textStyle ?? TextStyles.regular14Black,
         decoration: InputDecoration(
-          hintText: widget.hint,
-          hintStyle: widget.hintStyle ?? TextStyles.regularTextHint,
-          filled: widget.isFilled,
-          fillColor: widget.filledColor ?? AppColors.transparent,
+            hintText: widget.hint,
+            hintStyle: widget.hintStyle ?? TextStyles.regularTextHint,
+            filled: widget.isFilled,
+            fillColor: widget.filledColor ?? AppColors.transparent,
             errorText: widget.error != null && widget.error!.trim().isEmpty
                 ? null
                 : widget.error
@@ -59,10 +57,4 @@ class _EditTextState extends State<EditText> {
       ),
     );
   }
-}
-
-InputBorder _borderStyle({double? radius, Color? borderColor}){
-  return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(radius??AppFonts.s10),
-      borderSide: BorderSide(color:borderColor?? AppColors.primaryGreen, width: 2));
 }
