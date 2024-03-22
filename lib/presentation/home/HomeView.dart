@@ -18,8 +18,15 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  bool _loadingFlag = false;
 
-  void _forecastClickAction() {}
+
+  void _load(){
+    if(!_loadingFlag){
+      _loadingFlag = true;
+      context.load;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +42,16 @@ class _HomeViewState extends State<HomeView> {
               child: BlocConsumer<WeatherBloc, WeatherState>(
                 listener: (context, state) {
                   if(state is LoadingState && state.screenName == HomeView.name){
-                    context.load;
-                  }else if(state is SuccessState && state.screenName == HomeView.name){
+                    _load();
+                  }else if(state is SuccessState && state.screenName == HomeView.name && _loadingFlag){
+                    _loadingFlag = false;
                     context.stopLoader;
+                  }else if(state is FailureState && state.screenName == HomeView.name){
+                    if(_loadingFlag) {
+                      _loadingFlag = false;
+                      context.stopLoader;
+                    }
+                    context.openFailureDialog(state.error);
                   }
                 },
                 builder: (context, state) {
@@ -46,7 +60,7 @@ class _HomeViewState extends State<HomeView> {
                     children: [
                       const WeatherPresentation(),
                       const SizedBox(height: AppFonts.s10,),
-                      HomeForecast(onCardClick: _forecastClickAction,)
+                      HomeForecast(onCardClick: (){},)
                     ],
                   );
                 },

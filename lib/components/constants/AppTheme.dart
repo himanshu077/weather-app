@@ -16,7 +16,8 @@ class AppTheme {
     ),
     primaryColor: AppColors.primaryGreen,
     inputDecorationTheme: EditTextTheme.editTextTheme,
-    floatingActionButtonTheme: _floatingButtonTheme
+    floatingActionButtonTheme: _floatingButtonTheme,
+    checkboxTheme: _checkboxThemeData
   );
 
   static final ThemeData dark = ThemeData(
@@ -28,13 +29,29 @@ class AppTheme {
     ),
     primaryColor: AppColors.primaryGreen,
     inputDecorationTheme: EditTextTheme.editTextTheme,
-      floatingActionButtonTheme: _floatingButtonTheme
+      floatingActionButtonTheme: _floatingButtonTheme,
+    checkboxTheme: _checkboxThemeData
   );
 
 
   static FloatingActionButtonThemeData get _floatingButtonTheme => FloatingActionButtonThemeData(
     backgroundColor: AppColors.primaryBackground,
     shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppFonts.s40)),
+  );
+
+
+  static CheckboxThemeData get _checkboxThemeData => CheckboxThemeData(
+    fillColor: MaterialStateColor.resolveWith((states) {
+      if (states.contains(MaterialState.selected)) {
+        return AppColors.primaryColor;
+      }
+      return AppColors.transparent;
+    },
+    ),
+    side: const BorderSide(
+      color: Colors.grey,
+      width: 2.0,
+    )
   );
 }
 

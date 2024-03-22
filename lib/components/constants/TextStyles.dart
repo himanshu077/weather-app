@@ -13,6 +13,7 @@ class Family{
 
 class TextStyles{
   //Regular
+  static const TextStyle regular10White = TextStyle(color: AppColors.white, fontSize: AppFonts.s10, fontFamily: Family.regular);
   static const TextStyle regular12Black = TextStyle(color: AppColors.black, fontSize: AppFonts.s12, fontFamily: Family.regular);
   static const TextStyle regular12White = TextStyle(color: AppColors.white, fontSize: AppFonts.s12, fontFamily: Family.regular);
   static const TextStyle regular14Black = TextStyle(color: AppColors.black, fontSize: AppFonts.s14, fontFamily: Family.regular);
@@ -36,7 +37,7 @@ class TextStyles{
   static const TextStyle semiBold14Background = TextStyle(color: AppColors.primaryBackground, fontSize: AppFonts.s14, fontFamily: Family.semiBold);
   static const TextStyle semiBold24CreamBrown = TextStyle(color: AppColors.creamBrown, fontSize: AppFonts.s24, fontFamily: Family.semiBold);
   static const TextStyle semiBold16White = TextStyle(color: AppColors.white, fontSize: AppFonts.s16, fontFamily: Family.semiBold);
-  static const TextStyle semiBold70WhiteShadow = TextStyle(color: AppColors.white, fontSize: 70, fontFamily: Family.semiBold,shadows: [Shadow(color: AppColors.primaryBackground, offset: Offset(2, 2), blurRadius: 5,),]);
+  static const TextStyle semiBold70WhiteShadow = TextStyle(color: AppColors.white, fontSize: 70, fontFamily: Family.semiBold,shadows: [Shadow(color: AppColors.grey, offset: Offset(2, 2), blurRadius: 5,),]);
 
 
   //Bold

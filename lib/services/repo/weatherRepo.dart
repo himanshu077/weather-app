@@ -1,13 +1,17 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:weather_app/core/failure.dart';
-import 'package:weather_app/model/addressModel.dart';
-import 'package:weather_app/services/Api/apiService.dart';
+
+import '../../core/failure.dart';
+import '../../model/WeatherModel.dart';
+import '../../model/addressModel.dart';
+import '../../model/cords.dart';
+import '../Api/apiService.dart';
 
 abstract class WeatherRepository{
   Future<Either<Failure,AddressModel>> getAddressByCords({required double lat, required double lng});
   Future<Either<Failure,List<AddressModel>>> getAddressByName({required String name});
+  Future<Either<ErrorString,WeatherModel>> getWeatherData({required Cords cords});
 }
 
 class WeatherRepoImpl extends WeatherRepository{
@@ -48,4 +52,19 @@ class WeatherRepoImpl extends WeatherRepository{
     }
   }
 
+  @override
+  Future<Either<ErrorString, WeatherModel>> getWeatherData({required Cords cords}) async{
+    try{
+      final response = await _service.getWeatherData(cords.lat!, cords.lng!);
+      final data = jsonDecode(response.bodyString) as Map<String,dynamic>;
+      if(response.isSuccessful){
+        return Right(WeatherModel.fromJson(data));
+      }else{
+        return Left(ErrorString(error: data['reason']));
+      }
+    }catch(e){
+      print(e);
+      return Left(ErrorString(error: 'expection :: '+e.toString()));
+    }
+  }
 }

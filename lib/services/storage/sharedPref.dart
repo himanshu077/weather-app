@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:weather_app/components/constants/AppStrings.dart';
-import 'package:weather_app/model/cords.dart';
-import 'package:weather_app/services/storage/AppData.dart';
 
+import '../../components/constants/AppStrings.dart';
 import '../../model/addressModel.dart';
+import '../../model/cords.dart';
+import 'AppData.dart';
 
 class SharedPref {
   static const String _cordsKey = 'cordsKey_${AppStrings.appName}';

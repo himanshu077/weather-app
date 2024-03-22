@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/utils/LocationUtils.dart';
 import '../viewController/weather/weather_bloc.dart';
 
 import 'components/constants/AppTheme.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'services/Api/apiService.dart';
 import 'services/repo/weatherRepo.dart';
 import 'services/storage/sharedPref.dart';
+import 'utils/LocationUtils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,15 +22,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _service = ApiService.create();
-    final _repo = WeatherRepoImpl(service: _service);
+    final service = ApiService.create();
+    final repo = WeatherRepoImpl(service: service);
 
     return MultiBlocProvider(
       providers: [
-        // BlocProvider(create: (context) => WeatherBloc(repo: _repo)..add(GetAddressByCordsEvent())),
-        // BlocProvider(create: (context) => WeatherBloc(repo: _repo)..add(GetAddressListSearchByName(search: 'tira sujanpur'))),
         BlocProvider(
-            create: (context) => WeatherBloc(repo: _repo)..add(StartEvent())),
+            create: (context) => WeatherBloc(repo: repo)..add(StartEvent())),
       ],
       child: MaterialApp(
         theme: AppTheme.light,

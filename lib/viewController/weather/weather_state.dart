@@ -30,10 +30,16 @@ class LoadingState extends WeatherState {
 class SuccessState extends WeatherState{
   final String screenName;
   const SuccessState({required this.screenName});
-
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [screenName];
+}
 
+class FailureState extends WeatherState{
+  final String screenName;
+  final String error;
+  const FailureState({required this.screenName, required this.error});
+  @override
+  List<Object?> get props => [screenName,error];
 }
 
 

@@ -14,7 +14,7 @@ appDialog(BuildContext context, Widget child, {bool barrierDismissible = true}) 
               borderRadius: BorderRadius.all(Radius.circular(AppFonts.s16))),
           backgroundColor: AppColors.white,
           insetPadding: EdgeInsets.symmetric(horizontal: AppFonts.s16, vertical: AppFonts.s40),
-          content: Container(
+          content:  SizedBox(
               width: double.maxFinite,
               child: child),
         ),

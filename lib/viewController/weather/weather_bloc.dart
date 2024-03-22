@@ -3,16 +3,18 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:weather_app/core/failure.dart';
-import 'package:weather_app/model/cords.dart';
-import 'package:weather_app/presentation/home/HomeView.dart';
-import 'package:weather_app/presentation/location/locationOptionsView.dart';
-import 'package:weather_app/presentation/location/searchCityView.dart';
-import 'package:weather_app/services/repo/weatherRepo.dart';
-import 'package:weather_app/services/storage/sharedPref.dart';
-import 'package:weather_app/utils/DateTimeUtils.dart';
+import 'package:weather_app/utils/AppExtensions.dart';
 
+import '../../core/failure.dart';
+import '../../model/WeatherModel.dart';
 import '../../model/addressModel.dart';
+import '../../model/cords.dart';
+import '../../presentation/home/HomeView.dart';
+import '../../presentation/location/locationOptionsView.dart';
+import '../../presentation/location/searchCityView.dart';
+import '../../services/repo/weatherRepo.dart';
+import '../../services/storage/sharedPref.dart';
+import '../../utils/DateTimeUtils.dart';
 import '../../utils/LocationUtils.dart';
 
 part 'weather_event.dart';
@@ -37,7 +39,9 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
   Cords? get cords => _cords;
 
-
+  WeatherModel? weatherData;
+  WeatherModel? currentWeatherData;
+  WeatherModel? selectedHourWeatherData;
 
   void setAppBarLocation(AddressModel data) => _appbarLocation = data.getAddress;
 
@@ -54,7 +58,12 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     on<EditCityEvent>(_onEditCity);
     on<EditCityStateEvent>(_onEditCityState);
     on<RemoveCitiesEvent>(_onRemoveCities);
+    on<GetWeatherDataEvent>(_onGetWeatherData);
+    on<HourSelectEvent>(_onSelectHour);
   }
+
+
+
 
 
 
@@ -94,6 +103,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         savedCities.addAll(value);
         int index = savedCities.indexWhere((element) => element.isCordsEqual(this.cords!));
         setAppBarLocation(savedCities[index]);
+        add(GetWeatherDataEvent());
       });
     }
     emit(LauncherState(hasLocation: cords != null));
@@ -134,6 +144,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       SharedPref.setCords(lat: _cords!.lat!, lng: cords!.lng!);
       if(savedCities.isEmpty){
         setAppBarLocation(event.value);
+        add(GetWeatherDataEvent());
       }
     }
 
@@ -141,18 +152,16 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       savedCities.add(event.value);
       SharedPref.setCities(list: savedCities);
     }
+    searchCities.clear();
     emit(const SuccessState(screenName: ''));
-    add(ClearSearchCitiesEvent());
   }
 
   FutureOr<void> _onChooseCityForUpdates(ChooseCityForUpdatesEvent event, Emitter<WeatherState> emit) async{
-    emit(const LoadingState(screenName: HomeView.name));
+    emit(WeatherInitial());
     setAppBarLocation(event.value);
     _cords = event.value.getCords;
-
-    //TODO Get weather updates here.......
-    await Future.delayed(Duration(seconds: 3));
-    emit(const SuccessState(screenName: HomeView.name));
+    SharedPref.setCords(lat: cords!.lat!, lng: cords!.lng!);
+    add(GetWeatherDataEvent());
   }
 
   FutureOr<void> _onClearSearchCities(ClearSearchCitiesEvent event, Emitter<WeatherState> emit) async{
@@ -185,6 +194,28 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     citiesEditState = false;
     emit(const SuccessState(screenName: ''));
   }
+
+  FutureOr<void> _onGetWeatherData(GetWeatherDataEvent event, Emitter<WeatherState> emit) async{
+    emit(const LoadingState(screenName: HomeView.name));
+    final result = await _repo.getWeatherData(cords: cords!);
+    result.fold(
+            (failure) {
+              emit(FailureState(screenName: HomeView.name, error: failure.error));
+            },
+            (data) {
+              weatherData = data;
+              currentWeatherData = _getCurrentDayWeatherData(data: weatherData!,index: 0);
+              selectedHourWeatherData = _getSelectedHourWeatherData(data: currentWeatherData!, date: DateTime.now());
+              emit(const SuccessState(screenName: HomeView.name));
+            });
+  }
+
+  FutureOr<void> _onSelectHour(HourSelectEvent event, Emitter<WeatherState> emit) async{
+    emit(WeatherInitial());
+    final date = currentWeatherData!.hourly!.time![event.index].yyyy_MM_ddTHH_mm;
+    selectedHourWeatherData = _getSelectedHourWeatherData(data: currentWeatherData!, date: date);
+    emit(const SuccessState(screenName: ''));
+  }
 }
 
 Future <Either<ErrorString, Cords>> _getCurrentLocation() async{
@@ -205,5 +236,77 @@ Future <Either<ErrorString, Cords>> _getCurrentLocation() async{
 }
 
 
+WeatherModel _getCurrentDayWeatherData({required WeatherModel data, required int index}){
+  final hourly = data.hourly!;
 
+  final timeList = hourly.time ?? [];
+  final weatherCodeList = hourly.weathercode ?? [];
+  final tempList = hourly.temperature2M ?? [];
+  final humidityList = hourly.relativehumidity2M ?? [];
+  final windList = hourly.windspeed10M ?? [];
+  final apparentTempList = hourly.apparentTemperature ?? [];
+  final pressureList = hourly.surfacePressure ?? [];
 
+  final Daily daily = data.daily!;
+  final DateTime date = daily.time![index];
+
+  List<int> indexList = [];
+
+  for(int i = 0; i < timeList.length; i++){
+    if(timeList[i].yyyy_MM_ddTHH_mm.ddMMyyyy.isEquals(date.ddMMyyyy)) indexList.add(i);
+  }
+
+  final result = WeatherModel(
+    hourly: Hourly(
+      time: indexList.map((e) => timeList[e]).toList(),
+      weathercode: indexList.map((e) => weatherCodeList[e]).toList(),
+      temperature2M:  indexList.map((e) => tempList[e]).toList(),
+      relativehumidity2M: indexList.map((e) => humidityList[e]).toList(),
+      windspeed10M: indexList.map((e) => windList[e]).toList(),
+      apparentTemperature: indexList.map((e) => apparentTempList[e]).toList(),
+        surfacePressure: indexList.map((e) => pressureList[e]).toList()
+    ),
+    hourlyUnits: HourlyUnits(),
+    daily: Daily(
+      sunrise: [daily.sunrise![index]],
+      sunset: [daily.sunset![index]]
+    )
+  );
+  return result;
+
+}
+
+WeatherModel? _getSelectedHourWeatherData({required WeatherModel data, required DateTime date}){
+  final hourly = data.hourly!;
+  final hourList = hourly.time?? [];
+
+  final index = hourList.indexWhere((element){
+    final dateTime= element.yyyy_MM_ddTHH_mm;
+    final result = dateTime.isAtSameMomentAs(date) || (dateTime.isBefore(date) && date.difference(dateTime) < const Duration(hours: 1));
+    return result;
+  });
+
+  if(index > -1){
+    final weatherCodeList = hourly.weathercode?? [];
+    final tempList = hourly.temperature2M ?? [];
+    final humidityList = hourly.relativehumidity2M ?? [];
+    final windList = hourly.windspeed10M ?? [];
+    final apparentTempList = hourly.apparentTemperature ?? [];
+    final pressureList = hourly.surfacePressure ?? [];
+
+    return WeatherModel(
+      hourly: Hourly(
+        time: [hourList[index]],
+        temperature2M: [tempList[index]],
+        weathercode: [weatherCodeList[index]],
+        relativehumidity2M: [humidityList[index]],
+        windspeed10M: [windList[index]],
+        apparentTemperature: [apparentTempList[index]],
+        surfacePressure: [pressureList[index]]
+      ),
+      daily: data.daily
+    );
+  }else{
+    return null;
+  }
+}
