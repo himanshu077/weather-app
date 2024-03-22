@@ -85,3 +85,18 @@ class RemoveCitiesEvent extends WeatherEvent{
   List<Object?> get props => [];
 }
 
+class GetWeatherDataEvent extends WeatherEvent{
+  @override
+  List<Object?> get props => [];
+}
+
+
+class HourSelectEvent extends WeatherEvent{
+  final int index;
+
+  const HourSelectEvent({required this.index});
+
+  @override
+  List<Object?> get props => [index];
+}
+

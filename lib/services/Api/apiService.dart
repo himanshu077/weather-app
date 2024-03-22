@@ -24,4 +24,10 @@ abstract class ApiService extends ChopperService {
   Future<Response> getAddressByName(
       @Path(UrlKeys.name) final String name
       );
+
+  @Get(path: Urls.getWeatherData)
+  Future<Response> getWeatherData(
+      @Path(UrlKeys.lat) final double lat,
+      @Path(UrlKeys.lng) final double lng,
+      );
 }

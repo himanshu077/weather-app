@@ -31,7 +31,7 @@ class FailureMessageDailog extends StatelessWidget {
   Widget  mainView(){
     return  Column(
       children: [
-       const  ImageView(url: AppIcons.backButton,
+       const  ImageView(url: AppIcons.cancel,
           tintColor: AppColors.primaryColor,
           size: AppFonts.s40 * 2,),
         TextView(text: message, textStyle: TextStyles.regular16Black,
