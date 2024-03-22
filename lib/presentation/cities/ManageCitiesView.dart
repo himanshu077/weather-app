@@ -7,7 +7,6 @@ import '../../model/addressModel.dart';
 import '../../utils/AppExtensions.dart';
 import '../../components/constants/AppFonts.dart';
 import '../../components/constants/AppIcons.dart';
-import '../../components/constants/AppStrings.dart';
 import '../../components/constants/TextStyles.dart';
 import '../../components/coreComponents/ImageView.dart';
 import '../../components/coreComponents/TextView.dart';
@@ -157,78 +156,34 @@ class _ManageCitiesViewState extends State<ManageCitiesView> {
             onTap: _bloc.citiesEditState ? null : onTap,
             bgColor: isActiveCard ? AppColors.primaryColor.withOpacity(0.6) : null ,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const ImageView(
+                      url: AppIcons.location,
+                      size: 10,
+                      margin: EdgeInsets.only(right: 3, top: 5),
+                    ),
                     Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const ImageView(
-                                  url: AppIcons.location,
-                                  size: 10,
-                                  margin: EdgeInsets.only(right: 3, top: 5),
-                                ),
-                                Expanded(
-                                  child: TextView(
-                                    text: (data.city ?? '').trim().isEmpty
-                                        ? data.getAddress
-                                        : data.city ?? '',
-                                    textStyle: TextStyles.semiBold16White,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Visibility(
-                              visible: !editState || isActiveCard,
-                                  child: TextView(
-                                      text: '6${AppStrings.degree}',
-                                      textStyle: TextStyles.medium20White,
-                                    ),
-                                )
-                          ],
-                        ))
+                      child: TextView(
+                        text: (data.city ?? '').trim().isEmpty
+                            ? data.getAddress
+                            : data.city ?? '',
+                        textStyle: TextStyles.semiBold16White,
+                      ),
+                    ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                        flex: 4,
-                        child: SizedBox(
-                            child: (data.city ?? '').trim().isNotEmpty
-                                ? TextView(
-                                    text: data.getAddress,
-                                    textStyle: TextStyles.regular12White,
-                                  )
-                                : null)),
-                    Visibility(
-                      visible: isActiveCard || !editState,
-                      child: const Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              TextView(
-                                text: 'Sunny',
-                                textStyle: TextStyles.regular12White,
-                              ),
-                            ],
-                          )),
-                    )
-                  ],
-                )
+                SizedBox(
+                    child: (data.city ?? '').trim().isNotEmpty
+                        ? TextView(
+                            text: data.getAddress,
+                            textStyle: TextStyles.regular12White,
+                      margin: const EdgeInsets.only(top: 7),
+                          )
+                        : null)
               ],
             )),
         Visibility(
@@ -236,15 +191,30 @@ class _ManageCitiesViewState extends State<ManageCitiesView> {
           child: Positioned(
             top: 10,
               right: 10,
-              child: TapWidget(
-            onTap: () => _bloc
-                .add(EditCityStateEvent(value: !data.selected, index: index)),
-            child: Container(
-              height: 30,
-              width: 30,
-              color: data.selected ? AppColors.primaryGreen : AppColors.white,
-            ),
-          )),
+              child:Checkbox(
+                value: data.selected,
+                onChanged: (value){
+                  _bloc
+                      .add(EditCityStateEvent(value: !data.selected, index: index));
+                },
+              )
+
+
+          //     TapWidget(
+          //   onTap: () => _bloc
+          //       .add(EditCityStateEvent(value: !data.selected, index: index)),
+          //   child:
+          //
+          //
+          //
+          //   // Container(
+          //   //   height: 30,
+          //   //   width: 30,
+          //   //   color: data.selected ? AppColors.primaryGreen : AppColors.white,
+          //   // ),
+          // )
+
+          ),
         )
       ],
     );

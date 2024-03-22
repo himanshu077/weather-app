@@ -26,8 +26,10 @@ class HomeAppBar extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextView(text: bloc.appbarDate, textStyle: TextStyles.semiBold16White,),
-                  Row(children: [
-                    const ImageView(url: AppIcons.location, size: AppFonts.s14,margin: EdgeInsets.only(right: 3),),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    const ImageView(url: AppIcons.location, size: AppFonts.s14,margin: EdgeInsets.only(right: 3, top: 4),),
                     Expanded(child: TextView(text: bloc.appbarLocation, textStyle: TextStyles.regular14White,)),
                   ],)
                 ],

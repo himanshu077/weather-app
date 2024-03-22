@@ -1,63 +1,287 @@
 
+import 'AppIcons.dart';
+
 enum ImageType { asset, file, network }
 
-enum HangmanStates {state0, state1, state2, state3, state4, state5, state6}
-
-const List<String> keyboardKeys = [
-  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-  'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-];
-
-const List<String> wordLibrary =  [
-'abandon', 'keen', 'jealous', 'tact', 'oath', 'vacant', 'hardship', 'gallant', 'data', 'unaccustomed',
-'bachelor', 'qualify', 'corpse', 'conceal', 'dismal', 'frigid', 'inhabit', 'numb', 'peril', 'recline',
-'shriek', 'sinister', 'tempt', 'wager', 'typical', 'minimum', 'scarce', 'annual', 'persuade', 'essential',
-'blend', 'visible', 'expensive', 'talent', 'devise', 'wholesale', 'vapor', 'eliminate', 'villain', 'dense',
-'utilize', 'humid', 'theory', 'descend', 'circulate', 'enormous', 'predict', 'vanish', 'tradition', 'rural',
-'burden', 'campus', 'majority', 'assemble', 'explore', 'topic', 'debate', 'evade', 'probe', 'reform',
-'approach', 'detect', 'defect', 'employee', 'neglect', 'deceive', 'popular', 'thorough', 'client',
-'comprehensive', 'defraud', 'postpone', 'consent', 'massive', 'capsule', 'preserve', 'denounce', 'unique',
-'torrent', 'resent', 'molest', 'gloomy', 'unforeseen', 'exaggerate', 'amateur', 'mediocre', 'variety',
-'valid', 'survive', 'weird', 'prominent', 'security', 'bulky', 'reluctant', 'obvious', 'vicinity',
-'century', 'rage', 'document', 'conclude', 'resist', 'lack', 'ignore', 'challenge', 'miniature', 'source',
-'excel', 'feminine', 'mount', 'compete', 'dread', 'masculine', 'menace', 'tendency', 'underestimate',
-'victorious', 'numerous', 'flexible', 'evidence', 'solitary', 'vision', 'frequent', 'glimpse', 'recent',
-'decade', 'hesitate', 'absurd', 'conflict', 'minority', 'fiction', 'ignite', 'abolish', 'urban',
-'population', 'frank', 'pollute', 'reveal', 'prohibit', 'urgent', 'adequate', 'decrease', 'audible',
-'journalist', 'famine', 'revive', 'commence', 'observant', 'identify', 'migrate', 'vessel', 'persist',
-'hazy', 'gleam', 'editor', 'rival', 'violent', 'brutal', 'opponent', 'brawl', 'duplicate', 'vicious',
-'whirl', 'underdog', 'thrust', 'expand', 'alter', 'bewildered', 'mature', 'sacred', 'revise', 'pledge',
-'casual', 'pursue', 'unanimous', 'fortunate', 'pioneer', 'innovative', 'slender', 'surpass', 'vast',
-'doubt', 'capacity', 'penetrate', 'pierce', 'accurate', 'microscope', 'grateful', 'cautious', 'confident',
-'appeal', 'addict', 'wary', 'aware', 'misfortune', 'avoid', 'wretched', 'keg', 'nourish', 'harsh',
-'quantity', 'tragedy', 'pedestrian', 'glance', 'budget', 'nimble', 'manipulate', 'reckless', 'horrid',
-'rave', 'economy', 'lubricate', 'genius', 'harvest', 'abundant', 'uneasy', 'calculate', 'absorb',
-'estimate', 'morsel', 'quota', 'threat', 'panic', 'ban', 'appropriate', 'emerge', 'jagged', 'linger',
-'ambush', 'crafty', 'defiant', 'vigor', 'perish', 'fragile', 'captive', 'prosper', 'devour', 'plea',
-'weary', 'collide', 'confirm', 'verify', 'anticipate', 'dilemma', 'detour', 'merit', 'transmit',
-'relieve', 'baffle', 'warden', 'acknowledge', 'justice', 'delinquent', 'reject', 'deprive', 'spouse',
-'vocation', 'unstable', 'homicide', 'penalize', 'beneficiary', 'reptile', 'forbid', 'logical', 'exhibit',
-'proceed', 'precaution', 'extract', 'prior', 'embrace', 'valiant', 'partial', 'fierce', 'detest',
-'sneer', 'scowl', 'encourage', 'consider', 'vermin', 'wail', 'symbol', 'authority', 'neutral', 'trifle',
-'architect', 'matrimony', 'baggage', 'squander', 'abroad', 'fugitive', 'calamity', 'pauper', 'envy',
-'collapse', 'prosecute', 'possible', 'compel', 'awkward', 'venture', 'awesome', 'guide', 'quench',
-'betray', 'utter', 'pacify', 'respond', 'beckon', 'despite', 'disrupt', 'rash', 'rapid', 'exhaust',
-'severity', 'feeble', 'unite', 'cease', 'thrifty', 'miserly', 'monarch', 'outlaw', 'promote', 'illustrate',
-'disclose', 'excessive', 'disaster', 'censor', 'culprit', 'juvenile', 'bait', 'insist', 'toil', 'blunder',
-'daze', 'mourn', 'subside', 'maim', 'comprehend', 'commend', 'final', 'exempt', 'vain', 'repetition',
-'depict', 'mortal', 'novel', 'occupant', 'appoint', 'quarter', 'site', 'quote', 'verse', 'morality', 'roam',
-'attract', 'commuter', 'confine', 'idle', 'idol', 'jest', 'patriotic', 'dispute', 'valor', 'lunatic',
-'vein', 'uneventful', 'fertile', 'refer', 'distress', 'diminish', 'maximum', 'flee', 'vulnerable',
-'signify', 'mythology', 'colleague', 'torment', 'provide', 'loyalty', 'volunteer', 'prejudice', 'shrill', 'jolly', 'witty', 'hinder', 'lecture', 'abuse', 'mumble', 'mute', 'retain', 'candidate',
-  'precede', 'adolescent', 'radical', 'spontaneous', 'skim', 'vaccinate', 'untidy', 'utensil', 'sensitive',
-  'temperate', 'vague', 'elevate', 'lottery', 'finance', 'obtain', 'cinema', 'event', 'discard', 'soar',
-  'subsequent', 'relate', 'stationary', 'prompt', 'hasty', 'scorch', 'tempest', 'soothe', 'sympathetic',
-  'redeem', 'resume', 'harmony', 'refrain', 'illegal', 'narcotic', 'heir', 'majestic', 'dwindle', 'surplus',
-  'traitor', 'deliberate', 'vandal', 'drought', 'abide', 'unify', 'summit', 'heed', 'biography', 'drench',
-  'swarm', 'wobble', 'tumult', 'kneel', 'dejected', 'obedient', 'recede', 'tyrant', 'charity', 'verdict',
-  'unearth', 'depart', 'coincide', 'cancel', 'debtor', 'legible', 'placard', 'contagious', 'clergy', 'customary',
-  'transparent', 'scald', 'epidemic', 'obesity', 'magnify', 'obstacle', 'ventilate', 'jeopardize', 'negative',
-  'pension', 'vital', 'municipal', 'oral', 'complacent', 'wasp', 'rehabilitate', 'parole', 'vertical',
-  'multitude', 'nominate', 'potential', 'morgue', 'preoccupied', 'upholstery', 'indifference', 'maintain',
-  'snub', 'endure', 'wrath', 'expose', 'legend', 'ponder', 'resign', 'drastic', 'wharf', 'amend', 'ballot'
-];
+const weatherCodeJson = {
+  "0":{
+    "day":{
+      "description":"Sunny",
+      "image":AppIcons.sunny0
+    },
+    "night":{
+      "description":"Clear",
+      "image":AppIcons.clear0
+    }
+  },
+  "1":{
+    "day":{
+      "description":"Mainly Sunny",
+      "image":AppIcons.mainlySunny1
+    },
+    "night":{
+      "description":"Mainly Clear",
+      "image":AppIcons.mainlyClear1
+    }
+  },
+  "2":{
+    "day":{
+      "description":"Partly Cloudy",
+      "image":AppIcons.partlyCloudy2
+    },
+    "night":{
+      "description":"Partly Cloudy",
+      "image":AppIcons.partlyCloudyMoon2
+    }
+  },
+  "3":{
+    "day":{
+      "description":"Cloudy",
+      "image":AppIcons.cloudySun3
+    },
+    "night":{
+      "description":"Cloudy",
+      "image":AppIcons.cloudyMoon3
+    }
+  },
+  "45":{
+    "day":{
+      "description":"Foggy",
+      "image":AppIcons.fogSun45_48
+    },
+    "night":{
+      "description":"Foggy",
+      "image":AppIcons.fogMoon45_48
+    }
+  },
+  "48":{
+    "day":{
+      "description":"Rime Fog",
+      "image":AppIcons.fogSun45_48
+    },
+    "night":{
+      "description":"Rime Fog",
+      "image":AppIcons.fogMoon45_48
+    }
+  },
+  "51":{
+    "day":{
+      "description":"Light Drizzle",
+      "image":AppIcons.lightDrizzleSun51
+    },
+    "night":{
+      "description":"Light Drizzle",
+      "image":AppIcons.drizzle
+    }
+  },
+  "53":{
+    "day":{
+      "description":"Drizzle",
+      "image":AppIcons.lightDrizzleSun51
+    },
+    "night":{
+      "description":"Drizzle",
+      "image":AppIcons.drizzle
+    }
+  },
+  "55":{
+    "day":{
+      "description":"Heavy Drizzle",
+      "image":AppIcons.lightDrizzleSun51
+    },
+    "night":{
+      "description":"Heavy Drizzle",
+      "image":AppIcons.drizzle
+    }
+  },
+  "56":{
+    "day":{
+      "description":"Light Freezing Drizzle",
+      "image":AppIcons.lightDrizzleSun51
+    },
+    "night":{
+      "description":"Light Freezing Drizzle",
+      "image":AppIcons.drizzle
+    }
+  },
+  "57":{
+    "day":{
+      "description":"Freezing Drizzle",
+      "image":AppIcons.lightDrizzleSun51
+    },
+    "night":{
+      "description":"Freezing Drizzle",
+      "image":AppIcons.drizzle
+    }
+  },
+  "61":{
+    "day":{
+      "description":"Light Rain",
+      "image":AppIcons.lightRainSun61
+    },
+    "night":{
+      "description":"Light Rain",
+      "image":AppIcons.rainMoon
+    }
+  },
+  "63":{
+    "day":{
+      "description":"Rain",
+      "image":AppIcons.heavyRainDay
+    },
+    "night":{
+      "description":"Rain",
+      "image":AppIcons.heavyRainNight
+    }
+  },
+  "65":{
+    "day":{
+      "description":"Heavy Rain",
+      "image":AppIcons.heavyRainDay
+    },
+    "night":{
+      "description":"Heavy Rain",
+      "image":AppIcons.heavyRainNight
+    }
+  },
+  "66":{
+    "day":{
+      "description":"Light Freezing Rain",
+      "image":AppIcons.freezingRainDay
+    },
+    "night":{
+      "description":"Light Freezing Rain",
+      "image":AppIcons.freezingRainNight
+    }
+  },
+  "67":{
+    "day":{
+      "description":"Freezing Rain",
+      "image":AppIcons.freezingRainDay
+    },
+    "night":{
+      "description":"Freezing Rain",
+      "image":AppIcons.freezingRainNight
+    }
+  },
+  "71":{
+    "day":{
+      "description":"Light Snow",
+      "image":AppIcons.snowDay
+    },
+    "night":{
+      "description":"Light Snow",
+      "image":AppIcons.snowNight
+    }
+  },
+  "73":{
+    "day":{
+      "description":"Snow",
+      "image":AppIcons.snowDay
+    },
+    "night":{
+      "description":"Snow",
+      "image":AppIcons.snowNight
+    }
+  },
+  "75":{
+    "day":{
+      "description":"Heavy Snow",
+      "image":AppIcons.snowDay
+    },
+    "night":{
+      "description":"Heavy Snow",
+      "image":AppIcons.snowNight
+    }
+  },
+  "77":{
+    "day":{
+      "description":"Snow Grains",
+      "image":AppIcons.snowGrainsDay
+    },
+    "night":{
+      "description":"Snow Grains",
+      "image":AppIcons.snowGrainsNight
+    }
+  },
+  "80":{
+    "day":{
+      "description":"Light Showers",
+      "image":AppIcons.heavyRainDay
+    },
+    "night":{
+      "description":"Light Showers",
+      "image":AppIcons.heavyRainNight
+    }
+  },
+  "81":{
+    "day":{
+      "description":"Showers",
+      "image":AppIcons.heavyRainDay
+    },
+    "night":{
+      "description":"Showers",
+      "image":AppIcons.heavyRainNight
+    }
+  },
+  "82":{
+    "day":{
+      "description":"Heavy Showers",
+      "image":AppIcons.heavyRainDay
+    },
+    "night":{
+      "description":"Heavy Showers",
+      "image":AppIcons.heavyRainNight
+    }
+  },
+  "85":{
+    "day":{
+      "description":"Light Snow Showers",
+      "image":AppIcons.snowGrainsDay
+    },
+    "night":{
+      "description":"Light Snow Showers",
+      "image":AppIcons.snowGrainsNight
+    }
+  },
+  "86":{
+    "day":{
+      "description":"Snow Showers",
+      "image":AppIcons.snowGrainsDay
+    },
+    "night":{
+      "description":"Snow Showers",
+      "image":AppIcons.snowGrainsNight
+    }
+  },
+  "95":{
+    "day":{
+      "description":"Thunderstorm",
+      "image":AppIcons.thunderstormDay
+    },
+    "night":{
+      "description":"Thunderstorm",
+      "image":AppIcons.thunderstormNight
+    }
+  },
+  "96":{
+    "day":{
+      "description":"Light Thunderstorms With Hail",
+      "image":AppIcons.thunderstormDay
+    },
+    "night":{
+      "description":"Light Thunderstorms With Hail",
+      "image":AppIcons.thunderstormNight
+    }
+  },
+  "99":{
+    "day":{
+      "description":"Thunderstorm With Hail",
+      "image":AppIcons.thunderstormDay
+    },
+    "night":{
+      "description":"Thunderstorm With Hail",
+      "image":AppIcons.thunderstormNight
+    }
+  }
+};
